@@ -20,7 +20,6 @@ CASE
   WHEN followers > 5000000 THEN 'Large Artist'
   ELSE 'Small Artist'
 END AS artist_size
-
 FROM "alastairtyson/multiverse_music_streaming"."artists"; 
 
 -- 2. Create a label for artists followers > 5mil (large), 
@@ -33,7 +32,6 @@ CASE
   WHEN followers > 1000000 THEN 'Small Artist'
   ELSE 'Tiny Artist'
 END AS artist_size
-
 FROM "alastairtyson/multiverse_music_streaming" ."artists";
  
 -- Does the order matter?
@@ -48,7 +46,6 @@ CASE
   WHEN followers > 1000000 THEN 'Small Artist'
   ELSE 'Tiny Artist'
 END AS artist_size, AVG( CAST(artist_popularity AS INT) ) AS average_popularity
-
 FROM "alastairtyson/multiverse_music_streaming"."artists" 
 GROUP BY artist_size;
 
@@ -82,7 +79,6 @@ CASE
   WHEN genre LIKE '%dance%' THEN 'dance'
   ELSE 'other'
 END
-
 FROM "alastairtyson/multiverse_music_streaming"."artists"; 
 
 
@@ -96,7 +92,6 @@ CASE
   WHEN genre LIKE '%dance%' THEN 'dance'
   ELSE 'other'
 END AS main_genre, COUNT(*) AS no_of_artists
-
 FROM "alastairtyson/multiverse_music_streaming"."artists" 
 GROUP BY main_genre
 ORDER BY no_of_artists DESC;
@@ -110,7 +105,6 @@ CASE
   WHEN length >  60000 THEN 'Average'
   ELSE 'Short'
 END AS length_category
- 
 FROM "alastairtyson/multiverse_music_streaming"."tracks"; 
 
 -- 2b. How many songs fall into each category? 
@@ -122,7 +116,6 @@ CASE
   WHEN length >  60000 THEN 'Average'
   ELSE 'Short'
 END AS length_category, COUNT(*)
- 
 FROM "alastairtyson/multiverse_music_streaming"."tracks" 
 GROUP BY length_category;
 
@@ -140,7 +133,6 @@ CASE
   WHEN tr.track_popularity < 90 AND CAST(ar.artist_popularity AS INT) > 90 THEN 'Underperforming'
   ELSE 'Not Popular'
 END AS song_performance
- 
 FROM "alastairtyson/multiverse_music_streaming"."tracks" tr
 INNER JOIN "alastairtyson/multiverse_music_streaming"."artists" ar
   ON tr.artist = ar.artist_id;
@@ -155,7 +147,6 @@ CASE
   WHEN tr.track_popularity < 90 AND CAST(ar.artist_popularity AS INT) > 90 THEN 'Underperforming'
   ELSE 'Not Popular'
 END AS song_performance, ROUND(AVG(ar.followers), 1) AS average_followers
- 
 FROM "alastairtyson/multiverse_music_streaming"."tracks" tr
 INNER JOIN "alastairtyson/multiverse_music_streaming"."artists" ar
   ON tr.artist = ar.artist_id
@@ -171,7 +162,6 @@ CASE
   WHEN pl.song_id IS NULL THEN 'inactive'
   ELSE 'active'
 END as active_status
-
 FROM "alastairtyson/multiverse_music_streaming"."users" us
 FULL OUTER JOIN "alastairtyson/multiverse_music_streaming"."plays" pl
   ON us.user_id = pl.user
@@ -187,7 +177,6 @@ CASE
   WHEN dob > '2005-10-27' THEN 'Child'
   ELSE 'Adult'
 END AS age_category, SUM(number_plays) AS number_of_plays
-
 FROM "alastairtyson/multiverse_music_streaming"."users" us
 INNER JOIN "alastairtyson/multiverse_music_streaming"."plays" pl
   ON us.user_id = pl.user
