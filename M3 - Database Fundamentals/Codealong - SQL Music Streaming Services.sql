@@ -1,12 +1,13 @@
 -- Exploring the data and interface - how do the tables relate? How do we query it?
 -- What types of data are in our table?
--- Code formatting, comments in the code and semi-colons to end a block of code
+
+-- Code formatting: add comments to your code by starting a line with --
+-- And end a SQL block with a semi-colon to break up your queries ;
+
+-- Select ALL columns from a table with SELECT *
 
 
 -- Select columns from a table and limit results with SELECT and LIMIT
-
-
--- Select ALL columns from a table and limit results with SELECT *
 
 
 -- Select only unique values within a column with DISTINCT(col)
@@ -15,7 +16,7 @@
 -- Select countries col from users and order with ORDER BY col
 
 
--- ... And change to descending order with ORDER BY col DESC
+-- And change to descending order with ORDER BY col DESC
 
 
 -- Filter the genre column in artists for a certain genre with WHERE genre='pop rap'
@@ -30,10 +31,10 @@
 -- Group artists by genre with GROUP BY col and count with COUNT(genre) and rename cols with AS
 
 
--- -- And filter after a grouping with HAVING
+-- And filter after a grouping with HAVING
 
 
--- -- Mathematical operators and CAST for changing data types
+-- Mathematical operators and CAST for changing data types
 
 
 -- Extract aspects of a date from users.dob with WHERE EXTRACT(YEAR FROM dob) < year

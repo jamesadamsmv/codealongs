@@ -4,12 +4,12 @@
 -- Code formatting: add comments to your code by starting a line with --
 -- And end a SQL block with a semi-colon to break up your queries ;
 
--- Select columns from a table and limit results with SELECT and LIMIT
-SELECT album_name, no_tracks
+-- Select ALL columns from a table with SELECT *
+SELECT *
 FROM "alastairtyson/multiverse_music_streaming"."albums";
 
--- Select ALL columns from a table and limit results with SELECT *
-SELECT *
+-- Select columns from a table and limit results with SELECT and LIMIT
+SELECT album_name, no_tracks
 FROM "alastairtyson/multiverse_music_streaming"."albums"
 LIMIT 10;
 
@@ -24,7 +24,7 @@ FROM "alastairtyson/multiverse_music_streaming"."users"
 ORDER BY country
 LIMIT 100;
 
--- ... And change to descending order with ORDER BY col DESC
+-- And change to descending order with ORDER BY col DESC
 SELECT username, country
 FROM "alastairtyson/multiverse_music_streaming"."users"
 ORDER BY country, username DESC
@@ -60,7 +60,7 @@ GROUP BY genre
 ORDER BY no_of_artists DESC
 LIMIT 10;
 
--- -- And filter after a grouping with HAVING
+-- And filter after a grouping with HAVING
 SELECT genre, COUNT(genre) AS no_of_artists
 FROM "alastairtyson/multiverse_music_streaming"."artists"
 GROUP BY genre
@@ -68,7 +68,7 @@ HAVING COUNT(genre) > 20
 ORDER BY no_of_artists DESC
 LIMIT 100;
 
--- -- Mathematical operators and CAST for changing data types
+-- Mathematical operators and CAST for changing data types
 SELECT artist_popularity, followers, CAST(artist_popularity as bigint) + followers AS new_number
 FROM "alastairtyson/multiverse_music_streaming"."artists"
 LIMIT 10;
@@ -78,7 +78,7 @@ SELECT dob, EXTRACT(YEAR from dob) AS year_born
 FROM "alastairtyson/multiverse_music_streaming"."users"
 LIMIT 10;
 
--- ... and filter the results with WHERE EXTRACT(YEAR FROM dob) < year
+-- And filter the results with WHERE EXTRACT(YEAR FROM dob) < year
 SELECT dob, EXTRACT(YEAR from dob) AS year_born
 FROM "alastairtyson/multiverse_music_streaming"."users"
 WHERE EXTRACT(YEAR from dob) >= 2000 -- returns anyone born in or after the year 2000
