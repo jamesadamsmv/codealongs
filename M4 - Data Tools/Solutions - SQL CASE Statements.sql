@@ -47,7 +47,7 @@ CASE
   WHEN followers > 3000000 THEN 'Medium Artist'
   WHEN followers > 1000000 THEN 'Small Artist'
   ELSE 'Tiny Artist'
-END AS artist_size, AVG(CAST(artist_popularity AS INT)) AS average_popularity
+END AS artist_size, AVG( CAST(artist_popularity AS INT) ) AS average_popularity
 
 FROM "alastairtyson/multiverse_music_streaming"."artists" 
 GROUP BY artist_size;
@@ -58,7 +58,7 @@ GROUP BY artist_size;
 -- 1. Order tracks by their album popularity, 
 -- if it is a single then use its track popularity instead.
 
-SELECT a.track_name, b.album_popularity, a.track_popularity
+SELECT tr.track_name, al.album_popularity, tr.track_popularity
 FROM "alastairtyson/multiverse_music_streaming"."tracks" tr
 FULL OUTER JOIN "alastairtyson/multiverse_music_streaming"."albums" al
   ON tr.album=al.album_id
@@ -95,10 +95,11 @@ CASE
   WHEN genre LIKE '%rock%'  THEN 'rock'
   WHEN genre LIKE '%dance%' THEN 'dance'
   ELSE 'other'
-END AS main_genre, COUNT(*)
+END AS main_genre, COUNT(*) AS no_of_artists
 
 FROM "alastairtyson/multiverse_music_streaming"."artists" 
-GROUP BY main_genre;
+GROUP BY main_genre
+ORDER BY no_of_artists DESC;
 
 -- 2a. Label a track as long if over 3 minutes, 
 -- average if between 1 and 3 minutes and short otherwise
@@ -132,7 +133,7 @@ GROUP BY length_category;
 -- if track <90 but artist>90 label it 'Underperforming' 
 -- and if both <90 label it 'Not Popular'. 
 
-SELECT a.track_name, b.artist_name,
+SELECT tr.track_name, ar.artist_name,
 CASE
   WHEN tr.track_popularity > 90 AND CAST(ar.artist_popularity AS INT) > 90 THEN 'Supremely Popular'
   WHEN tr.track_popularity > 90 AND CAST(ar.artist_popularity AS INT) < 90 THEN 'Overperforming'
@@ -196,25 +197,42 @@ GROUP BY age_category;
 -- 5b. From users labelled children, 
 -- what were the top 5 artists streamed on the 27th October?
 
-SOLUTION????? ---------------------------------------------------------------------------------------------
+SELECT 
+    ar.artist_name,
+    SUM(pl.number_plays) AS total_plays
+FROM "alastairtyson/multiverse_music_streaming"."users" us
+INNER JOIN "alastairtyson/multiverse_music_streaming"."plays" pl
+  ON us.user_id = pl.user
+INNER JOIN "alastairtyson/multiverse_music_streaming"."tracks" tr
+  ON pl.song_id = tr.id
+INNER JOIN "alastairtyson/multiverse_music_streaming"."artists" ar
+  ON tr.artist = ar.artist_id
+WHERE
+    (CASE
+        WHEN dob > '2005-10-27' THEN 'Child'
+        ELSE 'Adult'
+    END) = 'Child'
+    AND CAST(pl.first_played AS date) = '2021-10-27'
+GROUP BY ar.artist_name
+ORDER BY total_plays DESC
+LIMIT 5;
 
 -- 6. [Stretch] For UK listeners find the number of plays 
 -- for morning (6am-noon), afternoon(noon-5pm), evening(5pm-8pm)
 -- and night. 
 
 SELECT
-CASE
-     WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 6  THEN 'Night'
-     WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 12 THEN 'Morning'
-     WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 17 THEN 'Afternoon'
-     WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 20 THEN 'Evening'
-     WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 24 THEN 'Night'
-     ELSE 'Other'
-END AS TIME_PLAYED, SUM(pl.number_plays)
-
+    CASE
+        WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 6  THEN 'Night'
+        WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 12 THEN 'Morning'
+        WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 17 THEN 'Afternoon'
+        WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 20 THEN 'Evening'
+        WHEN EXTRACT(HOUR FROM CAST(pl.first_played as TIME)) + 1 <= 24 THEN 'Night'
+        ELSE 'Other'
+    END AS time_played,
+    SUM(pl.number_plays)
 FROM "alastairtyson/multiverse_music_streaming"."plays" pl
-LEFT JOIN  "alastairtyson/multiverse_music_streaming"."users" us
+LEFT JOIN "alastairtyson/multiverse_music_streaming"."users" us
     ON pl.user = us.user_id
-WHERE users.country = 'UK'
-GROUP BY 1 --- change this!!!!!!!!!!!!!!!!!!!!!!!!!
-ORDER BY pl.first_played DESC
+WHERE us.country = 'UK'
+GROUP BY time_played;
