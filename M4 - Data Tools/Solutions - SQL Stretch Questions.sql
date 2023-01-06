@@ -17,7 +17,7 @@ JOIN "alastairtyson/multiverse_music_streaming"."tracks" as tr
     ON pl.song_id = tr.id
 JOIN "alastairtyson/multiverse_music_streaming"."albums" as al
     on tr.album = al.album_id
-WHERE no_tracks > 10;
+WHERE al.no_tracks > 10;
 
 -- Q2. What was the average track length of songs streamed from the UK?
 SELECT AVG(tr.length) as avg_track_length
