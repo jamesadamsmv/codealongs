@@ -84,6 +84,11 @@ SELECT DISTINCT( COUNT(artist_name) )
 FROM "alastairtyson/multiverse_music_streaming"."artists"
 WHERE artist_name ~* '1|2|3|4|5|6|7|8|9';
 
+-- 3.6
+SELECT COUNT(DISTINCT artist_name) as numerical_artist_names
+FROM "alastairtyson/multiverse_music_streaming"."artists" 
+WHERE artist_name ~ '[0-9]';
+
 
 -- Q4. Out of all artists with John in their name, ----------------------------------------------------------------------------------------------------------------------
 -- who had the highest number of streams (from the plays table)?
