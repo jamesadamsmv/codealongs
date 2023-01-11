@@ -23,7 +23,7 @@ END AS artist_size
 FROM "alastairtyson/multiverse_music_streaming"."artists"; 
 
 -- 2. Create a label for artists followers > 5mil (large), 
--- 3-5 (medium), 1-3 small, <3 tiny 
+-- 3-5 (medium), 1-3 small, <1 tiny 
 
 SELECT artist_name, followers,
 CASE
