@@ -1,0 +1,4 @@
+figure.figsize: 8, 8
+font.sans-serif: Arial
+font.size: 14
+axes.prop_cycle: cycler('color', ['64ABFF', 'FFE352', '4D61F4', '59D8A1', 'FF7C66']) # Multiverse colours!
